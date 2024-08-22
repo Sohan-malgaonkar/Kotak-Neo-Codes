@@ -1,0 +1,35 @@
+import requests
+
+# Define the URL for the instrument file
+url = "https://example.com/kotakneo/instruments"  # Replace with the actual URL
+
+# Define the URL for authentication (if needed)
+auth_url = "https://example.com/kotakneo/auth"  # Replace with the actual authentication URL
+
+# Your login credentials or API key
+credentials = {
+    'username': 'your_username',
+    'password': 'your_password'
+}
+
+# Step 1: Authenticate (if needed)
+auth_response = requests.post(auth_url, data=credentials)
+auth_response.raise_for_status()  # Check if the request was successful
+
+# Extract the token or session ID from the authentication response
+# This depends on the API's authentication mechanism
+auth_token = auth_response.json().get('token')  # Adjust based on the response structure
+
+# Step 2: Download the instrument file
+headers = {
+    'Authorization': f'Bearer {auth_token}'  # Use the appropriate header if needed
+}
+
+response = requests.get(url, headers=headers)
+response.raise_for_status()  # Check if the request was successful
+
+# Step 3: Save the content to a file
+with open('instrument_file.csv', 'wb') as file:
+    file.write(response.content)
+
+print("Instrument file downloaded successfully.")
